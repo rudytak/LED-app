@@ -1,0 +1,128 @@
+"""
+UI for local LED server communication.
+"""
+import sys
+import toga
+from toga.style import Pack
+from toga.style.pack import ALIGNMENT_CHOICES, COLUMN, ROW
+from toga.widgets.canvas import Canvas
+from travertino.colors import color
+from .post import post
+
+class LED(toga.App):
+
+    def startup(self):
+        # MAIN DIV
+        main_box = toga.Box(style=Pack(direction=COLUMN))
+
+        # ESP ID
+        self.esp_ids = ["0","1"]
+        esp_id_label = toga.Label(
+            'ESP ID: ',
+            style=Pack(padding=(0, 5))
+        )
+        self.esp_id_select = toga.Selection(items=self.esp_ids, style=Pack(flex=1))
+
+        esp_id = toga.Box(style=Pack(direction=ROW, padding=5))
+        esp_id.add(esp_id_label)
+        esp_id.add(self.esp_id_select) 
+        
+        # COLOUR PICKERS
+        picker_box = toga.Box(style=Pack(direction=ROW, padding=(0,5), alignment="center", flex=2))
+        self.picker1 = ColorPicker("Primary color")
+        self.picker2 = ColorPicker("Secondary color")
+        picker_box.add(self.picker1,toga.Divider(direction=1), self.picker2)
+
+        main_box.add(picker_box)
+
+        # Send button
+        self.sen_btn = toga.Button("Send", style=Pack(padding=10), on_press=self.send)
+        main_box.add(self.sen_btn)
+
+        # DISPLAY
+        self.main_window = toga.MainWindow(title=self.formal_name)
+        self.main_window.content = main_box
+        self.main_window.show()
+    
+    def send(self,caller):
+        post()
+
+    def main_loop(self):
+        return super().main_loop()
+
+
+def main():
+    return LED()
+
+def RGB_to_hex(r,g,b):
+    r = hex(int(r)).split("x")[-1]
+    g = hex(int(g)).split("x")[-1]
+    b = hex(int(b)).split("x")[-1]
+
+    if(len(r)==1): r="0"+r
+    if(len(g)==1): g="0"+g
+    if(len(b)==1): b="0"+b
+    return f"#{r}{g}{b}"
+
+class ColorPicker (toga.Box):
+    def __init__(self, label="Color picker"):
+        super().__init__(style=Pack(direction=ROW, flex=2))
+        # SLIDERS WITH LABELS
+        self.labels = ["R", "G", "B"]
+        self.label_colors = ["#ff0000","#00ff00","#0000ff"]
+        self.slider_boxes = []
+        self.sliders = []
+
+        for i in range(3):
+            self.slider_boxes.append(
+                toga.Box(style=Pack(direction=ROW, padding=0))
+            )
+            self.slider_boxes[i].add(
+                toga.Label(
+                    self.labels[i],
+                    style=Pack(padding=0, color=self.label_colors[i])
+                )
+            )
+            self.sliders.append(
+                toga.Slider(
+                    range=(0,255),
+                    on_change=self.updateCanvas,
+                    default=128
+                )
+            )
+            self.slider_boxes[i].add(
+                self.sliders[i]
+            )
+        
+        self.sliders_box = toga.Box(style=Pack(direction=COLUMN, padding=2))
+        for i in range(3):
+            self.sliders_box.add(self.slider_boxes[i])
+
+        canv_div = toga.Box(style=Pack(flex=1,direction=COLUMN, padding=2, alignment="right"))
+        self.canv = toga.Canvas(style=Pack(flex=1, width=80, height=80, padding=2))
+        canv_div.add(toga.Label(
+                    label,
+                    style=Pack(padding=1)
+                ))
+        canv_div.add(self.canv)
+
+        self.add(canv_div)
+        self.add(self.sliders_box)
+
+        self.updateCanvas(self)
+    
+    def updateCanvas(self, caller):
+        print("Updating color picker canvas", self, caller)
+        try:
+            c = self.getColor()
+            with self.canv.fill(c) as fill:
+                fill.rect(0, 0, 100, 100)
+        except:
+            pass
+    
+    def getColor(self):
+        return RGB_to_hex(
+                (self.sliders[0].value),
+                (self.sliders[1].value),
+                (self.sliders[2].value)
+            )

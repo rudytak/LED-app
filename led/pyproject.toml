@@ -1,0 +1,49 @@
+[tool.briefcase]
+project_name = "LED"
+bundle = "cz.quvia"
+version = "0.0.1"
+url = "https://192.168.1.49:3000/"
+license = "MIT license"
+author = 'Quvia'
+author_email = "o@aoo.cz"
+
+[tool.briefcase.app.led]
+formal_name = "LED"
+description = "UI for local LED server communication."
+icon = "src/led/resources/led"
+sources = ['src/led']
+requires = []
+
+
+[tool.briefcase.app.led.macOS]
+requires = [
+    'toga-cocoa>=0.3.0.dev20',
+]
+
+[tool.briefcase.app.led.linux]
+requires = [
+    'toga-gtk>=0.3.0.dev20',
+]
+system_requires = [
+    'libgirepository1.0-dev',
+    'libcairo2-dev',
+    'libpango1.0-dev',
+    'libwebkitgtk-3.0-0',
+    'gir1.2-webkit-3.0',
+]
+
+[tool.briefcase.app.led.windows]
+requires = [
+    'toga-winforms>=0.3.0.dev20',
+]
+
+# Mobile deployments
+[tool.briefcase.app.led.iOS]
+requires = [
+    'toga-iOS>=0.3.0.dev20',
+]
+
+[tool.briefcase.app.led.android]
+requires = [
+    'toga-android>=0.3.0.dev20',
+]
