@@ -5,13 +5,13 @@ port = 3000
 url = "http://"+ip+":"+str(port)+"/"
 
 def post(esp_id,mode,spd,wave,inte,hsv,c1,c2):
-    r1 = c1.split(",")[0]
-    g1 = c1.split(",")[1]
-    b1 = c1.split(",")[2]
+    r1 = c1[0]
+    g1 = c1[1]
+    b1 = c1[2]
 
-    r2 = c2.split(",")[0]
-    g2 = c2.split(",")[1]
-    b2 = c2.split(",")[2]
+    r2 = c2[0]
+    g2 = c2[1]
+    b2 = c2[2]
 
     myobj = {
         "mode": esp_id,

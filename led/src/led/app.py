@@ -17,7 +17,8 @@ class LED(toga.App):
         main_box = toga.Box(style=Pack(direction=COLUMN))
 
         # ESP ID
-        self.esp_ids = ["0","1"]
+        self.esp_ids = ["1","2"]
+        self.esp_ids_real = [1,2]
         esp_id_label = toga.Label(
             'ESP ID: ',
             style=Pack(padding=(0, 5), width=85)
@@ -30,8 +31,8 @@ class LED(toga.App):
         main_box.add(esp_id)
     
         # MODE
-        self.modes = ["0","1"]
-        self.mode_ids = []
+        self.modes = ["OFF","Solid color"]
+        self.mode_ids = [0,1]
         mode_label = toga.Label(
             'Mode: ',
             style=Pack(padding=(0, 5), width=85)
@@ -57,7 +58,7 @@ class LED(toga.App):
             #if(s=="100"): s="max"
             self.speed_label.text = "Speed ("+s+"): "
         self.speed_slider = toga.Slider(
-                    range=(0,100),
+                    range=(1,100),
                     on_change = updateSpeedLabel,
                     default=50
                 )
@@ -92,7 +93,7 @@ class LED(toga.App):
         main_box.add(toga.Divider(style=Pack(padding=5)))
 
         # HSV MODE
-        self.hsv_modes = ["Regular HSV","Power-conscious HSV", "Sine wavse"]
+        self.hsv_modes = ["Regular HSV","Power-conscious HSV", "Sine wave"]
         self.hsv_mode_ids = [1,2,3]
         hsv_mode_label = toga.Label(
             'HSV Mode: ',
@@ -104,6 +105,18 @@ class LED(toga.App):
         hsv_mode.add(hsv_mode_label)
         hsv_mode.add(self.hsv_mode_select) 
         main_box.add(hsv_mode)
+
+        # WAVE COUNT
+        wave_label = toga.Label(
+            'Wave count: ',
+            style=Pack(padding=(0, 5), width=85)
+        )
+        self.wave_num_input = toga.NumberInput(style=Pack(flex=1), step=1, min_value=1, max_value=100, default=1)
+
+        wave = toga.Box(style=Pack(direction=ROW, padding=5))
+        wave.add(wave_label)
+        wave.add(self.wave_num_input) 
+        main_box.add(wave)
         
         # DIVIDER
         main_box.add(toga.Divider(style=Pack(padding=5)))
@@ -125,7 +138,18 @@ class LED(toga.App):
         self.main_window.show()
     
     def send(self,caller):
-        post()
+        esp_id = self.esp_ids_real[self.esp_ids.index(self.esp_id_select.value)]
+        mode = self.mode_ids[self.modes.index(self.mode_select.value)]
+        spd = 100 - int(self.speed_slider.value)
+        wave = int(self.wave_num_input.value)
+        inte = int(self.intensity_slider.value)
+        hsv = self.hsv_mode_ids[self.hsv_modes.index(self.hsv_mode_select.value)]
+
+        def getSliderVal(x):
+            return int(x.value)
+        c1 = list(map(getSliderVal, self.picker1.sliders))
+        c2 = list(map(getSliderVal, self.picker2.sliders))
+        post(esp_id,mode,spd,wave,inte,hsv,c1,c2)
 
     def main_loop(self):
         return super().main_loop()
