@@ -31,8 +31,8 @@ class LED(toga.App):
         main_box.add(esp_id)
     
         # MODE
-        self.modes = ["OFF","Solid color"]
-        self.mode_ids = [0,1]
+        self.modes = ["OFF","Solid color", "Fill up", "Fill up reverse", "Fill and drain", "Fill and reverse", "Static rainbow", "Static rainbow reverse", "Propagating rainbow", "Propagating rainbow reverse", "Raninbow fill", "Rainbow fill reverse", "Rainbow fill and drain", "Rainbow fill and drain reverse", "Two color pulsing", "Color with black pulse", "Color with white pulsing", "Two color flashing", "Color with black flash", "Color with white flash", "Two color lerping", "Color with balck lerp", "Points in", "Points in & out"]
+        self.mode_ids = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,27,28]
         mode_label = toga.Label(
             'Mode: ',
             style=Pack(padding=(0, 5), width=85)
