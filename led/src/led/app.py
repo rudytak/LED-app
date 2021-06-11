@@ -5,6 +5,7 @@ import sys
 import toga
 from toga.style import Pack
 from toga.style.pack import ALIGNMENT_CHOICES, COLUMN, ROW
+from toga.widgets.base import Widget
 from toga.widgets.canvas import Canvas
 from travertino.colors import color
 from .post import post
@@ -19,20 +20,99 @@ class LED(toga.App):
         self.esp_ids = ["0","1"]
         esp_id_label = toga.Label(
             'ESP ID: ',
-            style=Pack(padding=(0, 5))
+            style=Pack(padding=(0, 5), width=85)
         )
         self.esp_id_select = toga.Selection(items=self.esp_ids, style=Pack(flex=1))
 
         esp_id = toga.Box(style=Pack(direction=ROW, padding=5))
         esp_id.add(esp_id_label)
         esp_id.add(self.esp_id_select) 
+        main_box.add(esp_id)
+    
+        # MODE
+        self.modes = ["0","1"]
+        self.mode_ids = []
+        mode_label = toga.Label(
+            'Mode: ',
+            style=Pack(padding=(0, 5), width=85)
+        )
+        self.mode_select = toga.Selection(items=self.modes, style=Pack(flex=1))
+
+        mode = toga.Box(style=Pack(direction=ROW, padding=5))
+        mode.add(mode_label)
+        mode.add(self.mode_select) 
+        main_box.add(mode)
+
+        # DIVIDER
+        main_box.add(toga.Divider(style=Pack(padding=5)))
+
+        # SPEED
+        self.speed_label = toga.Label(
+            'Speed (50): ',
+            style=Pack(padding=(0, 5), width=85)
+        )
+        def updateSpeedLabel(caller):
+            s = str(int(caller.value))
+            #if(s=="0"): s = "min"
+            #if(s=="100"): s="max"
+            self.speed_label.text = "Speed ("+s+"): "
+        self.speed_slider = toga.Slider(
+                    range=(0,100),
+                    on_change = updateSpeedLabel,
+                    default=50
+                )
+
+        speed = toga.Box(style=Pack(direction=ROW, padding=0))
+        speed.add(self.speed_label)
+        speed.add(self.speed_slider) 
+        main_box.add(speed)
+
+        # INTENSITY
+        self.intensity_label = toga.Label(
+            'Intensity (50): ',
+            style=Pack(padding=(0, 5), width=85)
+        )
+        def updateIntensityLabel(caller):
+            s = str(int(caller.value))
+            #if(s=="0"): s = "min"
+            #if(s=="100"): s="max"
+            self.intensity_label.text = "Intensity ("+s+"): "
+        self.intensity_slider = toga.Slider(
+                    range=(0,100),
+                    on_change = updateIntensityLabel,
+                    default=50
+                )
+
+        intensity = toga.Box(style=Pack(direction=ROW, padding=0))
+        intensity.add(self.intensity_label)
+        intensity.add(self.intensity_slider) 
+        main_box.add(intensity)
+
+        # DIVIDER
+        main_box.add(toga.Divider(style=Pack(padding=5)))
+
+        # HSV MODE
+        self.hsv_modes = ["Regular HSV","Power-conscious HSV", "Sine wavse"]
+        self.hsv_mode_ids = [1,2,3]
+        hsv_mode_label = toga.Label(
+            'HSV Mode: ',
+            style=Pack(padding=(0, 5), width=85)
+        )
+        self.hsv_mode_select = toga.Selection(items=self.hsv_modes, style=Pack(flex=1))
+
+        hsv_mode = toga.Box(style=Pack(direction=ROW, padding=5))
+        hsv_mode.add(hsv_mode_label)
+        hsv_mode.add(self.hsv_mode_select) 
+        main_box.add(hsv_mode)
         
+        # DIVIDER
+        main_box.add(toga.Divider(style=Pack(padding=5)))
+
         # COLOUR PICKERS
         picker_box = toga.Box(style=Pack(direction=ROW, padding=(0,5), alignment="center", flex=2))
         self.picker1 = ColorPicker("Primary color")
         self.picker2 = ColorPicker("Secondary color")
-        picker_box.add(self.picker1,toga.Divider(direction=1), self.picker2)
-
+        picker_box.add(self.picker1,toga.Divider(direction=1, style=Pack(height=120)), self.picker2)
         main_box.add(picker_box)
 
         # Send button
