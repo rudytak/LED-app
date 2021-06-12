@@ -31,7 +31,7 @@ class LED(toga.App):
         main_box.add(esp_id)
     
         # MODE
-        self.modes = ["OFF","Solid color", "Fill up", "Fill up reverse", "Fill and drain", "Fill and reverse", "Static rainbow", "Static rainbow reverse", "Propagating rainbow", "Propagating rainbow reverse", "Raninbow fill", "Rainbow fill reverse", "Rainbow fill and drain", "Rainbow fill and drain reverse", "Two color pulsing", "Color with black pulse", "Color with white pulsing", "Two color flashing", "Color with black flash", "Color with white flash", "Two color lerping", "Color with balck lerp", "Points in", "Points in & out"]
+        self.modes = ["OFF","Solid color", "Fill up", "Fill up reverse", "Fill and drain", "Fill and reverse", "Static rainbow", "Static rainbow reverse", "Propagating rainbow", "Propagating rainbow reverse", "Rainbow fill", "Rainbow fill reverse", "Rainbow fill and drain", "Rainbow fill and drain reverse", "Two color pulsing", "Color with black pulse", "Color with white pulsing", "Two color flashing", "Color with black flash", "Color with white flash", "Two color lerping", "Color with black lerp", "Points in", "Points in & out"]
         self.mode_ids = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,27,28]
         mode_label = toga.Label(
             'Mode: ',
@@ -133,14 +133,14 @@ class LED(toga.App):
         main_box.add(self.sen_btn)
 
         # DISPLAY
-        self.main_window = toga.MainWindow(title=self.formal_name)
+        self.main_window = toga.MainWindow(title=self.formal_name, size=(300,465))
         self.main_window.content = main_box
         self.main_window.show()
     
     def send(self,caller):
         esp_id = self.esp_ids_real[self.esp_ids.index(self.esp_id_select.value)]
         mode = self.mode_ids[self.modes.index(self.mode_select.value)]
-        spd = 100 - int(self.speed_slider.value)
+        spd = 101 - int(self.speed_slider.value)
         wave = int(self.wave_num_input.value)
         inte = int(self.intensity_slider.value)
         hsv = self.hsv_mode_ids[self.hsv_modes.index(self.hsv_mode_select.value)]
