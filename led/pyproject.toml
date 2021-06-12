@@ -12,7 +12,7 @@ formal_name = "LED"
 description = "UI for local LED server communication."
 icon = "src/led/resources/led"
 sources = ['src/led']
-requires = ['requests']
+requires = ['requests>=2.23.0']
 
 
 [tool.briefcase.app.led.macOS]
@@ -22,7 +22,7 @@ requires = [
 
 [tool.briefcase.app.led.linux]
 requires = [
-    'toga-gtk>=0.3.0.dev20',
+    'toga-gtk>=0.3.0.dev20'
 ]
 system_requires = [
     'libgirepository1.0-dev',
@@ -34,16 +34,16 @@ system_requires = [
 
 [tool.briefcase.app.led.windows]
 requires = [
-    'toga-winforms>=0.3.0.dev20',
+    'toga-winforms>=0.3.0.dev20'
 ]
 
 # Mobile deployments
 [tool.briefcase.app.led.iOS]
 requires = [
-    'toga-iOS>=0.3.0.dev20',
+    'toga-iOS>=0.3.0.dev20'
 ]
 
 [tool.briefcase.app.led.android]
 requires = [
-    'toga-android>=0.3.0.dev20',
+    'toga-android>=0.3.0.dev20'
 ]

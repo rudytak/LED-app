@@ -155,9 +155,6 @@ class LED(toga.App):
         return super().main_loop()
 
 
-def main():
-    return LED()
-
 def RGB_to_hex(r,g,b):
     r = hex(int(r)).split("x")[-1]
     g = hex(int(g)).split("x")[-1]
@@ -230,3 +227,6 @@ class ColorPicker (toga.Box):
                 (self.sliders[1].value),
                 (self.sliders[2].value)
             )
+
+def main():
+    return LED()
